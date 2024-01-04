@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  kube-state-metrics-config.yaml: LSBqb2JfbmFtZTogJ2t1YmUtc3RhdGUtbWV0cmljcycKICBzdGF0aWNfY29uZmlnczoKICAtIHRhcmdldHM6IFsna3ViZS1zdGF0ZS1tZXRyaWNzLmt1YmUtc3lzdGVtOjgwODAnXQo=
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: additional-scrape-configs

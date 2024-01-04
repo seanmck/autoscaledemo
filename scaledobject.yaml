@@ -1,0 +1,19 @@
+apiVersion: keda.sh/v1alpha1 
+kind: ScaledObject 
+metadata: 
+ name: podinfo-scale 
+ namespace: kedademo
+spec: 
+ scaleTargetRef: 
+   kind: Deployment 
+   name: podinfo
+ triggers: 
+  - type: prometheus
+    metadata: 
+      metricname: http_requests_total
+      serverAddress: http://prometheus-k8s.monitoring:9090
+      query: | 
+        sum(irate(http_requests_total[5m])) 
+      threshold: "10" 
+ cooldownPeriod: 30
+ minReplicaCount: 1

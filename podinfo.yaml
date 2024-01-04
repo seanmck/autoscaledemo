@@ -1,0 +1,51 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: podinfo 
+  namespace: kedademo
+spec: 
+  selector: 
+    matchLabels: 
+      app: podinfo 
+  template: 
+    metadata: 
+      labels: 
+        app: podinfo 
+    spec: 
+      containers: 
+      - name: podinfo 
+        image: stefanprodan/podinfo 
+        ports: 
+        - containerPort: 9898 
+        resources: 
+          requests: 
+            cpu: 100m 
+            memory: 128Mi
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: agentpool
+                operator: In
+                values:
+                - workloads
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: podinfo 
+  namespace: kedademo
+  labels: 
+    app: podinfo
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+spec: 
+  ports: 
+    - name: http
+      port: 80 
+      targetPort: 9898
+  selector: 
+    app: podinfo 
+  type: LoadBalancer
